@@ -1,0 +1,7 @@
+*.pyc
+*.lco
+
+*.swp
+*.log
+*.aux
+*.pdf
