@@ -136,18 +136,23 @@ def invoice_to_lco(invoice):
   if owner.GetName() != "":
     add_str += owner.GetName()+"\n"
 
-  addr  = owner.GetAddr()
   ### MWE: 2014-10-08 double? owner.GetName() vs. addr.GetName()
   #  if addr.GetName() != "":
   #    add_str += addr.GetName().decode("UTF-8")+"\n"
-  if addr.GetAddr1() != "":
-    add_str += addr.GetAddr1().decode("UTF-8")+"\n"
-  if addr.GetAddr2() != "":
-    add_str += addr.GetAddr2().decode("UTF-8")+"\n"
-  if addr.GetAddr3() != "":
-    add_str += addr.GetAddr3().decode("UTF-8")+"\n"
-  if addr.GetAddr4() != "":
-    add_str += addr.GetAddr4().decode("UTF-8")+"\n"
+  def mkaddr(addr):
+    result = u""
+    if addr == None:
+        return u""
+    if addr.GetAddr1() != "":
+      result += addr.GetAddr1().decode("UTF-8")+"\n"
+    if addr.GetAddr2() != "":
+      result += addr.GetAddr2().decode("UTF-8")+"\n"
+    if addr.GetAddr3() != "":
+      result += addr.GetAddr3().decode("UTF-8")+"\n"
+    if addr.GetAddr4() != "":
+      result += addr.GetAddr4().decode("UTF-8")+"\n"
+    return result
+  add_str += mkaddr(owner.GetAddr())
 
   lco_out += write_variable("toaddress2",add_str)
 
@@ -176,6 +181,7 @@ def invoice_to_lco(invoice):
       if type(ent) != Entry:
         ent=Entry(instance=ent)                                 # Add to method_returns_list
       
+      print "waat"
       descr = ent.GetDescription()
       ### MWE: 2014-10-08 type error when using 'gnucash.GncNumeric'
       price = gnucash.gnucash_core_c._gnc_numeric()
@@ -183,8 +189,11 @@ def invoice_to_lco(invoice):
       n     = gnucash.gnucash_core_c._gnc_numeric()
       n     = instance=ent.GetQuantity()                        # change gncucash_core.py
       print n
-
-      uprice = locale.currency(price).rstrip(" EUR").rstrip(" €")
+      locale.setlocale( locale.LC_ALL, '' )
+      uprice = locale.currency(price).rstrip(" EUR").rstrip(" €").strip("€ ")
+      print "--> waarg <--"
+      print(locale.currency(price))
+      print(uprice)
       ### MWE: 2014-10-08 use float instead of int. 
       ###      Otherwise decimal places will be cut and nobody want to spend 0.75 h for nothing but stupid software.
       un = unicode(float(n.num())/n.denom())               # choose best way to format numbers according to locale
@@ -194,6 +203,9 @@ def invoice_to_lco(invoice):
       line_str += u"}{"
       line_str += descr.decode("UTF-8")
       line_str += u"}{"
+
+      print(type(uprice))
+      print(type(line_str))
       line_str += uprice
       line_str += u"}"
 
@@ -206,10 +218,11 @@ def invoice_to_lco(invoice):
 
 
 def main(argv=None):
+    print "start"
     if argv is None:
         argv = sys.argv
     try:
-        input_url = "mysql://U:P@S/D"
+        input_url = "file:///home/jappie/Documents/company/boekhouding/checkbook.gnucash"
         prog_name = argv[0]
         with_ipshell = False
         ignore_lock = False
@@ -288,6 +301,7 @@ def main(argv=None):
     root_account = book.get_root_account()
     comm_table = book.get_table()
     EUR = comm_table.lookup("CURRENCY", "EUR")
+    print str(root_account)
 
     invoice_list=get_all_invoices_from_lots(root_account)
     if list_invoices:
@@ -299,6 +313,7 @@ def main(argv=None):
 
         if invoice_number == None:
             print "Using the first invoice:"
+            print str(invoice_list.keys())
             invoice_number=invoice_list.keys()[0]
         
         invoice=invoice_list[str(invoice_number)]
@@ -325,5 +340,6 @@ def main(argv=None):
     session.end()
 
 if __name__ == "__main__":
+
     sys.exit(main())
 
