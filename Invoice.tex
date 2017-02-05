@@ -68,7 +68,7 @@
    fromalign=right,%%        Platzierung des Briefkopfs
    fromphone=on,%%           Telefonnummer im Absender
    fromrule=off,%%           Linie im Absender (aftername, afteraddress)
-   fromfax=on,%%            Faxnummer
+   fromfax=off,%%            Faxnummer
    fromemail=on,%%           Emailadresse
    fromurl=off,%%            Homepage
    fromlogo=off,%%           Firmenlogo
@@ -87,7 +87,7 @@
    company
 ]{scrlttr2}
 %---------------------------------------------------------------------------
-\usepackage[ngerman]{babel}
+\usepackage[dutch]{babel}
 \usepackage[T1]{fontenc}
 %\usepackage[utf8]{inputenc} %% has to be set only in data.lco
 \usepackage{url}
@@ -162,18 +162,20 @@
 %---------------------------------------------------------------------------
 %\setkomavar{subject}{Rechnungsnummer \usekomavar{rechnungsnummer}}
 %---------------------------------------------------------------------------
-\opening{Sehr geehrte Damen und Herren,}
+\opening{Geachte mevrouw of mijnheer,}
 
-Ich erlaube mir, Ihnen folgende Beträge in Rechnung zu stellen:
+Hierbij worden de volgende bedragen bij u in rekening gesteld:
 
 \begin{Rechnung}[N] %oder [N]
-\Steuersatz{19}{7}
+\Steuersatz{21}{6}
 \usekomavar{entries}
 \end{Rechnung}
 
-Bitte zahlen Sie den Betrag von \Gesamtsumme \, bis zum \usekomavar{date_due} auf mein oben angegebenes Konto.
+Gelieve het totaal bedrag van \Gesamtsumme \, overmaken voor 
+\usekomavar{date_due}
+aan \usekomavar{IBAN} t.a.v. \usekomavar{rechnungsnummer}
 
-\closing{Mit bestem Dank und freundlichen Grüßen,}
+\closing{Bedankt en met vriendelijke groeten}
 %---------------------------------------------------------------------------
 %\ps{PS:}
 %\encl{}

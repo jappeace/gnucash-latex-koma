@@ -67,7 +67,7 @@
   \multiply\@tempcnta10\advance\@tempcntb-\@tempcnta
   \the\@tempcntb
 }
-\newcommand*\writeCurrency[1]{\@RCHwrite{#1}\,\@waehrung}
+\newcommand*\writeCurrency[1]{\@waehrung\,\@RCHwrite{#1}}
 \newcommand*\writebfCurrency[1]{{\fontseries{b}
   \selectfont\writeCurrency{#1}}}
 \newcommand*\@readNum[1]{\@RCHtmp=0\@readA#1\relax}
@@ -143,27 +143,27 @@
       \rsep}%
     \hrule\vskip-0.4pt}}
 \newcommand*\@RCHohne{
-  \@RCHsline{Gesamtsumme}{\writebfCurrency\@RCHsum}}
+  \@RCHsline{Totaal}{\writebfCurrency\@RCHsum}}
 \newcommand*\@RCHnetto{
-  \@RCHsline{Nettosumme}{\writeCurrency\@RCHsum}%
+  \@RCHsline{Bruto}{\writeCurrency\@RCHsum}%
   \multiply\@RCHmwsti\@RCHstsi
   \advance\@RCHmwsti50\divide\@RCHmwsti100
   \multiply\@RCHmwstii\@RCHstsii
   \advance\@RCHmwstii50\divide\@RCHmwstii100
   \@RCHmwst\@RCHmwsti\advance\@RCHmwst\@RCHmwstii
   \if@RCHerm
-    \@RCHsline{zzgl. \@RCHstsii\% MwSt.}{\writeCurrency\@RCHmwstii}%
+    \@RCHsline{BTW \@RCHstsii\%}{\writeCurrency\@RCHmwstii}%
   \fi
-  \@RCHsline{zzgl. \@RCHstsi\% MwSt.}{\writeCurrency\@RCHmwsti}%
+  \@RCHsline{BTW \@RCHstsi\%}{\writeCurrency\@RCHmwsti}%
   \advance\@RCHsum\@RCHmwst
   \hrule
   \vskip\doublerulesep\vskip0.4pt
-  \@RCHsline{Gesamtsumme}{\writebfCurrency\@RCHsum}%
+  \@RCHsline{Totaal}{\writebfCurrency\@RCHsum}%
   \writefoot
 }
 
 \newcommand*\@RCHbrutto{
-  \@RCHsline{Gesamtsumme}{\writebfCurrency\@RCHsum}
+  \@RCHsline{Totaal}{\writebfCurrency\@RCHsum}
   \multiply\@RCHmwsti\@RCHstsi\multiply\@RCHmwsti2%
   \@tempcnta100\advance\@tempcnta\@RCHstsi
   \advance\@RCHmwsti\@tempcnta
@@ -310,11 +310,11 @@
     % Titelzeile ausgeben
     %    \begin{macrocode}
     \@RCHlineX{\scriptsize Pos.\hfill}%
-              {\scriptsize Anzahl\hfill}%
+              {\scriptsize Aantal \hfill}%
               {\scriptsize Art.\,Nr.\hfill}%
-              {\scriptsize Beschreibung\hfill}%
-              {\scriptsize Einzelpreis\hfill}%
-              {\scriptsize Gesamtpreis\hfill}
+              {\scriptsize Beschrijving \hfill}%
+              {\scriptsize Enkel prijs \hfill}%
+              {\scriptsize Gezamenlijk \hfill}
     \@RCHinittrue
   \fi
 }
