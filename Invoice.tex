@@ -1,56 +1,3 @@
-%---------------------------------------------------------------------------
-% Invoice.tex v0.1 by Christoph Holtermann (c.holtermann@gmx.de)
-%
-% modified from 
-% scrlttr2.tex v0.3. (c) by Juergen Fenn <juergen.fenn@gmx.de>
-% Template for a letter to be typeset with scrlttr2.cls from KOMA-Script.
-% Latest version of the LaTeX Project Public License is applicable. 
-% File may not be modified and redistributed under the same name 
-% without the author's prior consent.
-% MWE: 2014-10-16: minor changes or improvements (adapted to ubuntu 14.04)
-%
-% MWE: 2014-10-16: additional Information
-% You have to create a file 'company.lco' in the same directory and adapt it with your needs:
-%\ProvidesFile{company.lco}[]
-%---------------------------------------------------------------------------
-% Absender
-%\setkomavar{fromname}{My Name}
-%\setkomavar{fromaddress}{My Address}
-%\setkomavar{fromphone}{My Telephone #}
-%\setkomavar{fromfax}{My Fax #}
-%\setkomavar{fromemail}{my@email.anywhere}
-%\setkomavar{backaddressseparator}{, }
-% %\setkomavar{signature}{Max Mustermann} %% either only your name
-%\setkomavar{signature}{My Name\\\includegraphics[width=8cm]{My-Name.pdf}} %% or with scanned Signature as pdf file
-%\setkomavar{frombank}{}
-%\newkomavar{cellphone}
-%\setkomavar{cellphone}{My Cellhone #}
-%\newkomavar{bankname}
-%\setkomavar{bankname}{My Bank}
-%\newkomavar{accountholder}
-%\setkomavar{accountholder}{My Account Holder}
-%\newkomavar{BIC}
-%\setkomavar{BIC}{My BIC}
-%\newkomavar{IBAN}
-%\setkomavar{IBAN}{My IBAN}
-%\setkomavar{location}{\\
-%  [5ex]\raggedleft{
-%    %\footnotesize{
-%    \scriptsize{
-%        \usekomavar{fromaddress}\\
-%        Telefon: \usekomavar{fromphone}\\
-%        Mobil: \usekomavar{cellphone}\\
-%        Fax: \usekomavar{fromfax}\\
-%        \usekomavar{fromemail}\\
-%        Bank: \usekomavar{bankname}\\
-%        BIC: \usekomavar{BIC}\\
-%        IBAN: \usekomavar{IBAN}\\
-%    }
-%  }
-%}%% right of Address
-%---------------------------------------------------------------------------
-
-%---------------------------------------------------------------------------
 \documentclass%%
 %---------------------------------------------------------------------------
   [fontsize=12pt,%%          Schriftgroesse
@@ -71,7 +18,7 @@
    fromfax=off,%%            Faxnummer
    fromemail=on,%%           Emailadresse
    fromurl=off,%%            Homepage
-   fromlogo=off,%%           Firmenlogo
+   fromlogo=on,%%           Firmenlogo
    addrfield=on,%%           Adressfeld fuer Fensterkuverts
    backaddress=on,%%          ...und Absender im Fenster
    subject=beforeopening,%%  Plazierung der Betreffzeile
@@ -95,6 +42,11 @@
 \usepackage{graphicx}
 \usepackage{rechnung}
 \usepackage{textcomp}
+\usepackage{eso-pic}
+\usepackage{geometry} 
+\usepackage{adjustbox}
+\geometry{a4paper, textwidth=17cm, textheight=22cm, marginparsep=16cm, marginparwidth=1cm}
+
 %---------------------------------------------------------------------------
 % Fonts
 \setkomafont{fromname}{\sffamily \LARGE}
@@ -105,29 +57,19 @@
 \usepackage{mathptmx}%% Schrift Times
 %\usepackage{mathpazo}%% Schrift Palatino
 %\setkomafont{fromname}{\LARGE}
+
 %---------------------------------------------------------------------------
 \begin{document}
-%---------------------------------------------------------------------------
-% Briefstil und Position des Briefkopfs
-\LoadLetterOption{DIN} %% oder: DINmtext, SN, SNleft, KOMAold.
-\makeatletter
-\@setplength{firstheadvpos}{20mm}
-\@setplength{firstheadwidth}{\paperwidth}
-\ifdim \useplength{toaddrhpos}>\z@
-  \@addtoplength[-2]{firstheadwidth}{\useplength{toaddrhpos}}
-\else
-  \@addtoplength[2]{firstheadwidth}{\useplength{toaddrhpos}}
-\fi
-\@setplength{foldmarkhpos}{6.5mm}
-%\setlength{\footskip}{1cm}
-\makeatother
-\firsthead{}
-%---------------------------------------------------------------------------
 % Fußzeile
 \firstfoot{%
 	\parbox[b]{\linewidth}{%
 		\centering\def\\{, }\footnotesize\usekomavar{frombank}%
 	}%
+}%
+
+% === HEADER DEFINITION
+\firsthead{% 
+    \raggedleft\usekomavar{fromlogo}
 }%
 %---------------------------------------------------------------------------
 % Geschaeftszeilenfelder

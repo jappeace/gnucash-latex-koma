@@ -8,10 +8,10 @@
 \setkomavar{website}{pinguin.work}
 \setkomavar{backaddressseparator}{, }
 %\setkomavar{signature}{Jappie Klooster}
-\setkomavar{signature}{Jappie Klooster\\\includegraphics[width=8cm]{jappie-handtekening.pdf}}
+\setkomavar{signature}{Jappie Klooster\\\includegraphics[width=5cm]{jappie-handtekening.pdf}}
 \setkomavar{frombank}{}
 \newkomavar{cellphone}
-\setkomavar{cellphone}{+49 123 123 123}
+\setkomavar{cellphone}{+316 401 66 188}
 \newkomavar{bankname}
 \setkomavar{bankname}{RaboBank}
 \newkomavar{accountholder}
@@ -37,4 +37,5 @@
     }
   }
 }%% Neben dem Adressfenster
+\setkomavar{fromlogo}{\adjustbox{valign=t}{\includegraphics[width=4cm]{logo.png}}}
 %---------------------------------------------------------------------------
