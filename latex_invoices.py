@@ -59,6 +59,7 @@
 #    - delete input_url from commandline for security reasons
 #
 
+latex_filename = "bill.tex"
 try:
     import sys
     import getopt
@@ -322,7 +323,7 @@ def main(argv=None):
         f.write(lco_str)
         f.close()
         owner = invoice.GetOwner().GetName()
-        return_code = subprocess.call('pdflatex -jobname "Rechnung {} {}" Invoice.tex'.format(invoice_number, owner ), shell = True)
+        return_code = subprocess.call('pdflatex -jobname "Rechnung {} {}" {}'.format(invoice_number, owner, latex_filename), shell = True)
         if return_code == 0:
 	  print "success"
 
