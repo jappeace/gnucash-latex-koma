@@ -1,0 +1,42 @@
+The output file can be imported into KOMA-Script-letters.
+This works primarily for germany. Internationalization welcome!
+
+* Usage :
+\code latex_invoice file://testfile \endcode
+will create file data.lco.
+\code latex --output-format=pdf Invoice.tex \endcode
+should run latex on file Invoice.tex and result in Invoice.pdf. Invoice.tex includes data.lco.
+
+Additional information :
+
+- http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
+
+* Credits to and ideas from
+
+- I got this from [[https://github.com/mwellnitz/gnucash-latex][this repo]].
+- Main function as proposed by Guido van Rossum
+  at http://www.artima.com/weblogs/viewpost.jsp?thread=4829
+- Invoice.tex is derived from\n
+  scrlttr2.tex v0.3. (c) by Juergen Fenn <juergen.fenn@gmx.de>\n
+  http://www.komascript.de/node/355\n
+  english translation: ftp://ftp.dante.de/tex-archive/info/templates/fenn/scrlttr2en.tex
+- rechnung.sty\n
+  from M G Berberich (berberic@fmi.uni-passau.de) and Ulrich Sibiller (uli42@web.de)
+  Ver3.10 from http://www.forwiss.uni-passau.de/~berberic/TeX/Rechnung/index.html
+
+* To Do:
+
+- get own contact data from gnucash
+- have own bank information in footline
+- nicer formatting of invoice date and date due
+- is there anything else missing in this invoice ?
+
+* Additional files:
+
+- Invoice.tex\n
+Example template file. Should be modified according to personal needs.
+- rechnung.sty\n
+style file for invoices.\n
+This file is not part of the python-bindings!\n
+For an example where to get it see section credits below.
+
