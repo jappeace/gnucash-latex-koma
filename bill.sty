@@ -182,7 +182,9 @@
 \newcommand*{\rsep}[0]{\hskip\tabcolsep\vrule}
 \newcommand*{\lsep}[0]{\vrule\hskip\tabcolsep}
 
-\newcommand*\@RCHlineX[6]{{
+% This command does the inner computation of the table rows off the invoice 
+% table
+\newcommand*\@RCHlineX[7]{{ % the argumetns are entirely posititional
 \goodbreak\nointerlineskip
     \vbox{
       \if@RCHhor
@@ -193,45 +195,62 @@
         \fi
       \fi
       \hbox to\textwidth{%
-\lsep%
+\lsep% You can change the order of the table by moving if/else brackets up and down
         \if@RCHpos%
-           \hbox to\@RCHPosWidth{\hfil #1\strut}%
+           \hbox to\@RCHPosWidth{\hfil #1\strut}% %number of line on bill
            \sep
         \fi% Pos-Spalte
-        \hbox to\@RCHAnzWidth{\hfil #2\strut}\sep% Anzahl-Spalte
-        \if@RCHartnum%
-          \hbox to\@RCHArtnumWidth{\hfil #3\strut}%
-          \sep%
-        \fi% Art-Num-Spalte
-        \vtop{\normalbaselines%
+
+	   \vtop{\normalbaselines%
            \noindent\rightskip=0pt plus1cm%
            \hsize\@RCHwdt%
-           \linewidth\hsize#4\null\strut\par}%
-        \hfil\sep%Beschreibung
+           \linewidth\hsize#4\null\strut\par}% 4 = Description
+	   \hfil\sep%Beschreibung (Description)
+
+		% amount (of stuff) + unit, unit = 7 amount = 2
+		\hbox to\@RCHAnzWidth{\hfil #2\strut\hskip 1pt #6\hskip 2pt}\sep% Anzahl-Spalte, 
+
+        \if@RCHartnum%
+          \hbox to\@RCHArtnumWidth{\hfil #3}%
+          \sep%
+        \fi% Art-Num-Spalte
+
+		%single price
         \hbox to\@RCHEinzelWidth{\hfil #5\strut}\sep% Einzelpreis
-        \hbox to\@RCHGesamtWidth{\hfil #6\strut}\rsep% Gesamtpreis
+
+		%total price (of entry row)
+        \hbox to\@RCHGesamtWidth{\hfil #7\strut}\rsep% Gesamtpreis
       }%hbox
      }%vbox
 }}
-\newcommand*\@Artikel[4][X]{\@ArtikelX[#1]{#2}{}{#3}{#4}}
-\newcommand*\@ArtikelX[5][X]{
+% This is the command that reads data.lco, increase the [number] to read more data
+% I don't know why 3 is ignored of artikel X
+\newcommand*\@Artikel[5][X]{\@ArtikelX[#1]{#2}{}{#3}{#4}{#5}}
+
+% This command does the basic computation of the prices
+\newcommand*\@ArtikelX[6][X]{
   \initRechnung
   \advance\@RCHcnt1%
   \@readNum{#5}
   \@RCHtmptmp=\@RCHtmp%
   \@readNum{#2}\multiply\@RCHtmp\@RCHtmptmp
   \advance\@RCHtmp99\divide\@RCHtmp100%Aufrunden auf 2 Nachkommastellen.
-  \@lineBaseX[#1]{\the\@RCHcnt}{#2}{#3}{#4}{#5}
+  \@lineBaseX[#1]{\the\@RCHcnt}{#2}{#3}{#4}{#5}{#6}
 }
+% another raw reading command
 \newcommand*\@Versandkosten[2][X]{\@VersandkostenX[#1]{#2}}
 \newcommand*\@VersandkostenX[2][X]{
   \initRechnung
   \@readNum{#2}
   \@lineBaseX[#1]{\null}{1}{\null}{Versandkosten}{#2}
 }
-\newcommand*\@lineBaseX[6][X]{
+
+% So this is the table consturcting command called by both artikel X
+% *and* Versandkosten (sending costs).
+% It uses RCH to make the inner rows
+\newcommand*\@lineBaseX[7][X]{
   \global\advance\@RCHsum\@RCHtmp
-  \@RCHlineX{#2}{#3}{#4}{#5}{#6}{\writeCurrency\@RCHtmp
+  \@RCHlineX{#2}{#3}{#4}{#5}{#6}{#7}{\writeCurrency\@RCHtmp
     \expandafter\ifx#1X\else\rlap{$^*$}\fi}
   \expandafter
   \ifx#1X
@@ -276,6 +295,10 @@
   \let\Versandkosten\@Versandkosten
 \fi
 }
+
+% This is the  thing that ties it all together,
+% However it also defines the collumn names which is quite important
+% TODO move these collumn names to commands of their own
 \newcommand*{\initRechnung}[0]
 {
   \if@RCHinit
@@ -307,6 +330,7 @@
               {\scriptsize Art.\,Nr.\hfill}%
               {\scriptsize Beschrijving \hfill}%
               {\scriptsize Enkel prijs \hfill}%
+              {}
               {\scriptsize Gezamenlijk \hfill}
     \@RCHinittrue
   \fi
