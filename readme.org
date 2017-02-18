@@ -11,9 +11,25 @@ Additional information :
 
 - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
 
+  
+* Install
+
+** for Ubuntu 14.04:
+#+BEGIN_SRC sh
+apt install texlive-latex-base texlive-latex-recommended python-gnucash texlive-lang-german pdflatex ipython
+#+END_SRC
+
+** Clone this repo
+
+** Change for your needs:
+latex_invoices.py: scroll down to 'def main' and change input_url = '' to your gnucash connections (file, mysql, etc.) for MySQL it's mysql://\<USERNAME>:\<PASSWORD>@\<SERVER>/\<DATABASE>
+Replace Benjamin_Franklein.pdf with your signature (source:https://commons.wikimedia.org/wiki/File:Autograph_of_Benjamin_Franklin.svg)
+adapt company.lco to fit your needs
+
 * Credits to and ideas from
 
-- I got this from [[https://github.com/mwellnitz/gnucash-latex][this repo]].
+- I got this from [[https://github.com/mwellnitz/gnucash-latex][this repo]]. He also has a [[https://github.com/mwellnitz/gnucash-latex/wiki][wiki]] in german mostly, so if you need
+  help you could try and translate that.
 - Main function as proposed by Guido van Rossum
   at http://www.artima.com/weblogs/viewpost.jsp?thread=4829
 - Invoice.tex is derived from\n
@@ -26,6 +42,7 @@ Additional information :
 
 * To Do:
 
+- Propper localization
 - get own contact data from gnucash
 - have own bank information in footline
 - nicer formatting of invoice date and date due
