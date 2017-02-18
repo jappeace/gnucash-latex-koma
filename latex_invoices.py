@@ -181,19 +181,14 @@ def invoice_to_lco(invoice):
       if type(ent) != Entry:
         ent=Entry(instance=ent)                                 # Add to method_returns_list
       
-      print "waat"
       descr = ent.GetDescription()
       ### MWE: 2014-10-08 type error when using 'gnucash.GncNumeric'
       price = gnucash.gnucash_core_c._gnc_numeric()
       price = ent.GetInvPrice().to_double()
       n     = gnucash.gnucash_core_c._gnc_numeric()
       n     = instance=ent.GetQuantity()                        # change gncucash_core.py
-      print n
       locale.setlocale( locale.LC_ALL, '' )
       uprice = locale.currency(price).rstrip(" EUR").rstrip(" €").strip("€ ")
-      print "--> waarg <--"
-      print(locale.currency(price))
-      print(uprice)
       ### MWE: 2014-10-08 use float instead of int. 
       ###      Otherwise decimal places will be cut and nobody want to spend 0.75 h for nothing but stupid software.
       un = unicode(float(n.num())/n.denom())               # choose best way to format numbers according to locale
@@ -204,8 +199,6 @@ def invoice_to_lco(invoice):
       line_str += descr.decode("UTF-8")
       line_str += u"}{"
 
-      print(type(uprice))
-      print(type(line_str))
       line_str += uprice
       line_str += u"}"
       # Perhaps to add the action table??
