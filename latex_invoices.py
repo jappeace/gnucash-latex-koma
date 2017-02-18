@@ -250,8 +250,8 @@ def main(argv=None):
                 print "listing all invoices"
                 list_invoices=True
             if opt[0] in ["-n"]:
-                invoice_number = int(opt[1])
-                print "using invoice number", invoice_number
+                invoice_number = opt[1]
+                print "using invoice number " + invoice_number
             if opt[0] in ["-o"]:
                 output_file_name = opt[1]
                 print "using outpu file", output_file_name
@@ -316,7 +316,8 @@ def main(argv=None):
             print str(invoice_list.keys())
             invoice_number=invoice_list.keys()[0]
         
-        invoice=invoice_list[str(invoice_number)]
+        print(invoice_list)
+        invoice=invoice_list[invoice_number]
         print "Using the following invoice:"
         print invoice
     
