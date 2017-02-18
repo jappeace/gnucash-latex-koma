@@ -208,6 +208,10 @@ def invoice_to_lco(invoice):
       print(type(line_str))
       line_str += uprice
       line_str += u"}"
+      # Perhaps to add the action table??
+      line_str += u"{"
+      line_str += "uur" if ent.GetAction() == "Hours"  else "art."
+      line_str += u"}"
 
       #print line_str
       ent_str += line_str
