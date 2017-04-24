@@ -64,6 +64,7 @@ try:
     import sys
     import getopt
     import gnucash
+    from gnucash import GncNumeric
     import str_methods
     ## MWE:2014-10-08 from IPython.Shell import IPShellEmbed
     from IPython.core.interactiveshell import InteractiveShell
@@ -175,6 +176,9 @@ def invoice_to_lco(invoice):
   # Write the entries
   ent_str = u""
   ### MWE: locale.setlocale(locale.LC_ALL,"de_DE")
+  taxes = 0.0
+  bruto = 0.0
+  total = 0.0
   for n,ent in enumerate(invoice.GetEntries()): 
       
       line_str = u""
@@ -186,13 +190,23 @@ def invoice_to_lco(invoice):
       ### MWE: 2014-10-08 type error when using 'gnucash.GncNumeric'
       price = gnucash.gnucash_core_c._gnc_numeric()
       price = ent.GetInvPrice().to_double()
+
+      taxval = ent.GetDocTaxValue(True,True,False)
+
       n     = gnucash.gnucash_core_c._gnc_numeric()
       n     = instance=ent.GetQuantity()                        # change gncucash_core.py
       locale.setlocale( locale.LC_ALL, '' )
-      uprice = locale.currency(price).rstrip(" EUR").rstrip(" €").strip("€ ")
+      uprice = locale.currency(price/1.21).rstrip(" EUR").rstrip(" €").strip("€ ")
       ### MWE: 2014-10-08 use float instead of int. 
       ###      Otherwise decimal places will be cut and nobody want to spend 0.75 h for nothing but stupid software.
-      un = unicode(float(n.num())/n.denom())               # choose best way to format numbers according to locale
+      quantity = float(n.num())/n.denom()
+      un = unicode(quantity)               # choose best way to format numbers according to locale
+
+      curtaxes = GncNumeric(taxval.num, taxval.denom).to_double()
+      curprice = price*quantity
+      taxes += curtaxes
+      total += curprice
+      bruto += curprice - curtaxes
 
       line_str =  u"\Artikel{"
       line_str += un
@@ -202,14 +216,17 @@ def invoice_to_lco(invoice):
 
       line_str += uprice
       line_str += u"}"
-
+      print(ent.GetAction())
       # Perhaps to add the action table??
       line_str += u"{"
-      line_str += "uur" if ent.GetAction() == "Hours"  else "art."
+      line_str += "uur" if ent.GetAction() == "Uren"  else "art."
       line_str += u"}"
       #print line_str
       ent_str += line_str
 
+  lco_out += write_variable("taxes", str(round(taxes,2)))
+  lco_out += write_variable("bruto", str(round(bruto,2)))
+  lco_out += write_variable("total", str(round(total,2)))
   lco_out += write_variable("entries",ent_str)
 
   return lco_out
@@ -324,9 +341,7 @@ def main(argv=None):
         f.write(lco_str)
         f.close()
         owner = invoice.GetOwner().GetName()
-        return_code = subprocess.call('pdflatex -jobname "Rekening {} {}" {}'.format(invoice_number, owner, latex_filename), shell = True)
-        if return_code == 0:
-	    print "success"
+        subprocess.call('pdflatex -jobname "Rekening {} {}" {}'.format(invoice_number, owner, latex_filename), shell = True)
 
     if with_ipshell:
         ipshell= IPShellEmbed()

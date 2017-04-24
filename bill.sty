@@ -135,23 +135,25 @@
       \hbox to \@RCHGesamtWidth{\hfil#2}%
       \rsep}%
     \hrule\vskip-0.4pt}}
+
+% Foot line, summing it up
 \newcommand*\@RCHohne{
   \@RCHsline{Totaal}{\writebfCurrency\@RCHsum}}
 \newcommand*\@RCHnetto{
-  \@RCHsline{Bruto}{\writeCurrency\@RCHsum}%
+  \@RCHsline{Bruto}{\texteuro \usekomavar{bruto}}%
   \multiply\@RCHmwsti\@RCHstsi
   \advance\@RCHmwsti50\divide\@RCHmwsti100
   \multiply\@RCHmwstii\@RCHstsii
   \advance\@RCHmwstii50\divide\@RCHmwstii100
   \@RCHmwst\@RCHmwsti\advance\@RCHmwst\@RCHmwstii
   \if@RCHerm
-    \@RCHsline{BTW \@RCHstsii\%}{\writeCurrency\@RCHmwstii}%
+    \@RCHsline{BTW \@RCHstsii\%}{\Euro\@RCHmwstii}%
   \fi
-  \@RCHsline{BTW \@RCHstsi\%}{\writeCurrency\@RCHmwsti}%
+  \@RCHsline{BTW \@RCHstsi\%}{\texteuro\usekomavar{taxes}}%
   \advance\@RCHsum\@RCHmwst
   \hrule
   \vskip\doublerulesep\vskip0.4pt
-  \@RCHsline{Totaal}{\writebfCurrency\@RCHsum}%
+  \@RCHsline{Totaal}{\texteuro \usekomavar{total}}%
   \writefoot
 }
 
