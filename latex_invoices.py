@@ -170,7 +170,7 @@ def invoice_to_lco(invoice):
   date_due  = invoice.GetDateDue()
   udate_due = date_due.strftime("%d.%m.%Y")
   lco_out  += write_variable("date_due",udate_due)+"\n"
-
+  lco_out += write_variable("description", str(invoice.GetNotes()))
 
   # Write the entries
   ent_str = u""
@@ -297,14 +297,6 @@ def main(argv=None):
     
     book = session.book
     root_account = book.get_root_account()
-    descent_account = [descendant for descendant in root_account.get_descendants()]
-    print(descent_account)
-    for account in descent_account:
-        print account.GetName()
-        for i,lot in enumerate(get_all_lots(account)):
-            print i
-            print lot
-    print("end")
     comm_table = book.get_table()
     EUR = comm_table.lookup("CURRENCY", "EUR")
 
@@ -319,8 +311,8 @@ def main(argv=None):
         if invoice_number == None:
             print "Using the first invoice:"
             invoice_number=0
-        
-        invoice=invoice_list[invoice_number]
+
+        invoice=invoice_list[int(invoice_number)]
         print "Using the following invoice:"
         print invoice
     
@@ -332,9 +324,9 @@ def main(argv=None):
         f.write(lco_str)
         f.close()
         owner = invoice.GetOwner().GetName()
-        # return_code = subprocess.call('pdflatex -jobname "Rechnung {} {}" {}'.format(invoice_number, owner, latex_filename), shell = True)
-        # if return_code == 0:
-	  # print "success"
+        return_code = subprocess.call('pdflatex -jobname "Rekening {} {}" {}'.format(invoice_number, owner, latex_filename), shell = True)
+        if return_code == 0:
+	    print "success"
 
     if with_ipshell:
         ipshell= IPShellEmbed()
