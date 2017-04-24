@@ -98,14 +98,14 @@ def get_all_invoices_from_lots(account):
   This is based on lots. So invoices without lots will be missed."""
 
   lot_list=get_all_lots(account)
-  invoice_list={}
+  invoice_list=[]
   for lot in lot_list:
     if type(lot).__name__ == 'SwigPyObject':
         lot = gnucash.GncLot(instance=lot)
     invoice=gnucash.gnucash_core_c.gncInvoiceGetInvoiceFromLot(lot.instance)
-    
+
     if invoice:
-      invoice_list[Invoice(instance=invoice).GetID()]=Invoice(instance=invoice)
+      invoice_list.append(Invoice(instance=invoice))
   return invoice_list
 
 def invoice_to_lco(invoice):
@@ -220,7 +220,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     try:
-        input_url = "file:///home/jappie/Documents/company/boekhouding/checkbook.gnucash"
+        input_url = "file:///home/jappie/Documents/company/boekhouding/boekhouding.gnucash"
         prog_name = argv[0]
         with_ipshell = False
         ignore_lock = False
@@ -297,13 +297,20 @@ def main(argv=None):
     
     book = session.book
     root_account = book.get_root_account()
+    descent_account = [descendant for descendant in root_account.get_descendants()]
+    print(descent_account)
+    for account in descent_account:
+        print account.GetName()
+        for i,lot in enumerate(get_all_lots(account)):
+            print i
+            print lot
+    print("end")
     comm_table = book.get_table()
     EUR = comm_table.lookup("CURRENCY", "EUR")
-    print str(root_account)
 
     invoice_list=get_all_invoices_from_lots(root_account)
     if list_invoices:
-        for number,invoice in invoice_list.items():
+        for number,invoice in enumerate(invoice_list):
             print "("+str(number)+")"
             print invoice
 
@@ -311,10 +318,8 @@ def main(argv=None):
 
         if invoice_number == None:
             print "Using the first invoice:"
-            print str(invoice_list.keys())
-            invoice_number=invoice_list.keys()[0]
+            invoice_number=0
         
-        print(invoice_list)
         invoice=invoice_list[invoice_number]
         print "Using the following invoice:"
         print invoice
@@ -327,9 +332,9 @@ def main(argv=None):
         f.write(lco_str)
         f.close()
         owner = invoice.GetOwner().GetName()
-        return_code = subprocess.call('pdflatex -jobname "Rechnung {} {}" {}'.format(invoice_number, owner, latex_filename), shell = True)
-        if return_code == 0:
-	  print "success"
+        # return_code = subprocess.call('pdflatex -jobname "Rechnung {} {}" {}'.format(invoice_number, owner, latex_filename), shell = True)
+        # if return_code == 0:
+	  # print "success"
 
     if with_ipshell:
         ipshell= IPShellEmbed()
