@@ -61,6 +61,8 @@ adapt company.lco to fit your needs
 - Use jinja templates instead (for example): https://code.gnucash.org/docs/MASTER/gncinvoice__jinja_8py_source.html
 - Python 3
 - [[https://docs.python.org/3/library/argparse.html][arg parse]] rather than not invented here
+- We could maybe eventually try to merge this project with offertex
+  (once I ported that to jinjia among other things)
 * Additional files:
 
 - Invoice.tex\n
