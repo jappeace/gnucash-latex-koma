@@ -10,8 +10,17 @@ should run latex on file Invoice.tex and result in Invoice.pdf. Invoice.tex incl
 Additional information :
 
 - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
-
   
+
+** Hacking
+
+Finding information about the api can be difficult.
+So here some aditional sources:
+
+1. this project export gnucash to json (in a self invented method)
+   https://github.com/cirrax/gnucash-toolset/tree/master/gnucashtoolset
+2. This is an api documentation, however I found inconsistencies with the current api I used:
+   https://piecash.readthedocs.io/en/latest/tutorial/index_existing.html#other-objects
 * Install
 
 ** for Ubuntu 14.04:
@@ -48,6 +57,10 @@ adapt company.lco to fit your needs
 - nicer formatting of invoice date and date due
 - is there anything else missing in this invoice ?
 
+** Structural
+- Use jinja templates instead (for example): https://code.gnucash.org/docs/MASTER/gncinvoice__jinja_8py_source.html
+- Python 3
+- [[https://docs.python.org/3/library/argparse.html][arg parse]] rather than not invented here
 * Additional files:
 
 - Invoice.tex\n
